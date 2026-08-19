@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "./lib/supabase";
 import type { User } from "@supabase/supabase-js";
+import SearchExercises from "./components/ExerciseSearch";
+
 
 
 export default function Home() {
@@ -11,6 +13,8 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+
 
     useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -28,21 +32,19 @@ export default function Home() {
       } else {
         setUser(session.user)
       }
-    })
+    });
 
     return () => subscription.unsubscribe()
   }, [router])
 
   if (loading) return null
 
+
   return (     
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <button
-            onClick={() => supabase.auth.signOut()}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-          >
-            Sign Out
-          </button>
+        <div className="flex flex-col gap-4 text-base font-medium items-center">
+        <h1 className="text-2xl font-bold">Welcome to Gym Bro!</h1>
+
+        <SearchExercises />
         </div>
   );
 }
