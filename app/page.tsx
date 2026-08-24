@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "./lib/supabase";
 import type { User } from "@supabase/supabase-js";
 import SearchExercises from "./components/ExerciseSearch";
+import { Exercise } from "./types/exercise";
 
 
 
@@ -40,11 +41,13 @@ export default function Home() {
   if (loading) return null
 
 
+
+
   return (     
         <div className="flex flex-col gap-4 text-base font-medium items-center">
         <h1 className="text-2xl font-bold">Welcome to Gym Bro!</h1>
 
-        <SearchExercises />
+        
         </div>
   );
 }
