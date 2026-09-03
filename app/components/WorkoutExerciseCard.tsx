@@ -3,8 +3,6 @@
 import { WorkoutExerciseDraft } from "../types/workoutType";
 import SetRow from "./SetRow";
 
-
-
 type WorkoutExerciseCardProps = {
     exercise: WorkoutExerciseDraft;
     onChange: (updatedExercise: WorkoutExerciseDraft) => void;
@@ -13,15 +11,14 @@ type WorkoutExerciseCardProps = {
 
 export default function WorkoutExerciseCard({ exercise, onChange, onDelete }: WorkoutExerciseCardProps) {
 
-
     const handleSetChange = (index: number, weight: number, reps: number) => {
         const updatedSets = [...exercise.sets];
-        updatedSets[index] = { weight, reps };
+        updatedSets[index] = { ...updatedSets[index], weight, reps };
         onChange({ ...exercise, sets: updatedSets });
     };
 
     const handleAddSet = () => {
-        const updatedSets = [...exercise.sets, { weight: 0, reps: 0 }];
+        const updatedSets = [...exercise.sets, { id: crypto.randomUUID(), weight: 0, reps: 0 }];
         onChange({ ...exercise, sets: updatedSets });
     }
 
@@ -37,28 +34,27 @@ export default function WorkoutExerciseCard({ exercise, onChange, onDelete }: Wo
                 <button className="text-sm text-red-500" onClick={onDelete}>Delete</button>
             </div>
 
-            {exercise.sets.map((set, index) => (
-                <div key={index} className="flex items-center gap-2">
-                    <SetRow
-                        key={index}
-                        setNumber={index + 1}
-                        weight={set.weight}
-                        reps={set.reps}
-                        onChange={(weight, reps) => handleSetChange(index, weight, reps)}
-                    />
-                    <button className="text-sm text-red-500" onClick={() => handleRemoveSet(index)}>Remove</button>
-                </div>
-            ))}
+            <div className="grid grid-cols-[2rem_1fr_1fr_2rem] gap-2 text-xs font-semibold text-zinc-500 px-1">
+                <span className="text-center">Set</span>
+                <span className="text-center">Kg</span>
+                <span className="text-center">Reps</span>
+                <span></span>
+            </div>
 
+            {exercise.sets.map((set, index) => (
+                <SetRow
+                    key={set.id}
+                    setNumber={index + 1}
+                    weight={set.weight}
+                    reps={set.reps}
+                    onChange={(weight, reps) => handleSetChange(index, weight, reps)}
+                    onRemove={() => handleRemoveSet(index)}
+                />
+            ))}
 
             <button onClick={handleAddSet} className="text-sm text-blue-500 self-start">
                 + Add Set
             </button>
-
         </div>
-
-
-
     );
-
 };

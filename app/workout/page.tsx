@@ -19,14 +19,14 @@ export default function WorkoutPage() {
         setStarted(true);
     }
 
-   function handleAddExercise(exercise: Exercise) {
-        const newDraft: WorkoutExerciseDraft = {
-            exerciseId: exercise.id,
-            exerciseName: exercise.name,
-            sets: [{ weight: 0, reps: 0 }],
-        };
-        setExercises((prev) => [...prev, newDraft]);
-    }
+function handleAddExercise(exercise: Exercise) {
+    const newDraft: WorkoutExerciseDraft = {
+        exerciseId: exercise.id,
+        exerciseName: exercise.name,
+        sets: [{ id: crypto.randomUUID(), weight: 0, reps: 0 }],
+    };
+    setExercises((prev) => [...prev, newDraft]);
+}
 
     function handleExerciseChange(index: number, updated: WorkoutExerciseDraft) {
         setExercises((prev) => prev.map((ex, i) => (i === index ? updated : ex)));

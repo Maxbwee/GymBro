@@ -21,7 +21,7 @@ export type Set = {
     completed: boolean;
 };
 
-export type SetDraft = Pick<Set, "weight" | "reps">;
+export type SetDraft = Pick<Set, "weight" | "reps"> & { id: string };
 
 export type WorkoutExerciseDraft = {
     exerciseId: string;
