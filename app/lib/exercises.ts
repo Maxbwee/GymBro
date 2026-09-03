@@ -12,17 +12,23 @@ export async function getExercises() {
     return data;
 };
 
-export async function getExerciseByName(name: string) {
-    const { data, error } = await supabase
-    .from('exercises')
-    .select('*')
-    .ilike('name', `%${name}%`)
-    .limit(10);
+const PAGE_SIZE = 10;
+
+export async function getExerciseByName(name: string, page: number = 0) {
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, error, count } = await supabase
+        .from('exercises')
+        .select('*', { count: 'exact' })
+        .ilike('name', `%${name}%`)
+        .range(from, to);
+
     if (error) {
         console.error(`Error fetching exercise with name ${name}:`, error);
-        return null;
+        return { data: null, count: 0 };
     }
-    return data;
+    return { data, count: count ?? 0 };
 };
 
 export async function getExercisesByEquipment(equipment: string) {
