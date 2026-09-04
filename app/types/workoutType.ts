@@ -28,3 +28,10 @@ export type WorkoutExerciseDraft = {
     exerciseName: string;
     sets: SetDraft[];
 };
+
+export type WorkoutWithExercises = Workout & {
+    workout_exercises: (WorkoutExercise & {
+        exercises: { name: string}; 
+        sets: Set[];
+    })[];
+}

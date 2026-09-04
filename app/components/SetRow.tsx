@@ -34,6 +34,8 @@ return(
         <input
             type="number"
             value={weightInput}
+            min={1}
+            step={1}
             onChange={(e) => handleWeightChange(e.target.value)}
             placeholder="Kg"
             className="border border-gray-300 rounded px-2 py-1 w-full"
@@ -41,6 +43,8 @@ return(
         <input
             type="number"
             value={repsInput}
+            min={1}
+            step={1}
             onChange={(e) => handleRepsChange(e.target.value)}
             placeholder="Reps"
             className="border border-gray-300 rounded px-2 py-1 w-full"
