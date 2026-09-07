@@ -30,7 +30,7 @@ export default function SetRow({ setNumber, weight, reps, onChange, onRemove }: 
 
 return(
     <div className="grid grid-cols-[2rem_1fr_1fr_2rem] items-center gap-2">
-        <span className="font-bold text-sm">{setNumber}</span>
+        <span className="font-bold text-sm text-black text-center">{setNumber}</span>
         <input
             type="number"
             value={weightInput}
@@ -38,7 +38,7 @@ return(
             step={1}
             onChange={(e) => handleWeightChange(e.target.value)}
             placeholder="Kg"
-            className="border border-gray-300 rounded px-2 py-1 w-full"
+            className="border border-zinc-300 rounded px-2 py-1 w-full text-black focus:outline-none focus:border-black"
         />
         <input
             type="number"
@@ -47,12 +47,12 @@ return(
             step={1}
             onChange={(e) => handleRepsChange(e.target.value)}
             placeholder="Reps"
-            className="border border-gray-300 rounded px-2 py-1 w-full"
+            className="border border-zinc-300 rounded px-2 py-1 w-full text-black focus:outline-none focus:border-black"
         />
         <button
             type="button"
             onClick={onRemove}
-            className="text-red-500 text-sm justify-self-center"
+            className="text-red-500 hover:text-red-600 text-sm justify-self-center"
         >
             ✕
         </button>

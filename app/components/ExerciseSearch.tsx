@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image";
+import { Search } from "lucide-react";
 import { useState, useRef } from "react";
 import { getExerciseByName } from "../lib/exercises";
 import { Exercise } from "../types/exercise";
@@ -75,14 +76,17 @@ export default function ExerciseSearch({ onSelect }: ExerciseSearchProps) {
     const hasPrevPage = page > 0;
 
     return (
-        <div className="relative w-full bg-black text-white rounded-full px-6 py-3">
-            <input
-                type="text"
-                value={search}
-                onChange={(e) => handleExerciseSearch(e.target.value)}
-                placeholder="Search exercises..."
-                className="border p-2 rounded w-full text-white"
-            />
+        <div className="relative w-full">
+            <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => handleExerciseSearch(e.target.value)}
+                    placeholder="Search exercises..."
+                    className="w-full h-12 pl-11 pr-5 rounded-full bg-white border border-zinc-200 text-black placeholder:text-zinc-400 shadow-sm focus:outline-none focus:border-black"
+                />
+            </div>
 
             {exercises.length > 0 && (
                 <div
