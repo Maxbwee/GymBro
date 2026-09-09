@@ -14,15 +14,16 @@ const THEME_STORAGE_KEY = "gymbro-theme";
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setTheme] = useState<Theme>("default");
+    // Lazy initializer reads localStorage once, synchronously, during the first render
+    // instead of via an effect + setState (which would cause an extra cascading render).
+    // Guarded for SSR, where `window`/`localStorage` don't exist.
+    const [theme, setTheme] = useState<Theme>(() => {
+        if (typeof window === "undefined") return "default";
+        return localStorage.getItem(THEME_STORAGE_KEY) === "pink" ? "pink" : "default";
+    });
 
-    useEffect(() => {
-        const stored = localStorage.getItem(THEME_STORAGE_KEY);
-        if (stored === "pink") {
-            setTheme("pink");
-        }
-    }, []);
-
+    // Keeps the DOM's `theme-pink` class in sync with React state — this is the
+    // "update an external system with the latest state from React" effect pattern.
     useEffect(() => {
         document.documentElement.classList.toggle("theme-pink", theme === "pink");
     }, [theme]);
