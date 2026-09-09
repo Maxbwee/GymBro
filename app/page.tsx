@@ -51,15 +51,15 @@ export default function Home() {
 
 
   return (
-        <main className="flex flex-col items-center gap-6 p-6 pb-32 bg-zinc-50 min-h-screen">
+        <main className="flex flex-col items-center gap-6 p-6 pb-32 bg-zinc-50 pink:bg-pink-50 min-h-screen">
           <header className="flex flex-col items-center gap-1 mt-4 text-center">
-            <h1 className="text-2xl font-bold text-black">Welcome to Gym Bro!</h1>
-            <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Your Past Workouts</h2>
+            <h1 className="text-2xl font-bold text-black pink:text-pink-900">Welcome to Gym Bro!</h1>
+            <h2 className="text-sm font-semibold text-zinc-400 pink:text-pink-400 uppercase tracking-wide">Your Past Workouts</h2>
           </header>
 
           <section className="w-full max-w-sm flex flex-col gap-4">
             {workouts.length === 0 && (
-              <p className="text-center text-zinc-400 text-sm">No past workouts found.</p>
+              <p className="text-center text-zinc-400 pink:text-pink-300 text-sm">No past workouts found.</p>
             )}
             {workouts.map((workout) => (
               <PastWorkoutCard key={workout.id} workout={workout} />

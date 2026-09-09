@@ -21,11 +21,11 @@ export default function MobileNavBar() {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 flex items-center justify-around p-4 bg-white shadow sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 flex items-center justify-around p-4 bg-white pink:bg-pink-50 shadow sm:hidden">
             {navItems.map(({href, label, icon: Icon}) => {
                 const isActive = pathname === href; 
                 return (
-                    <Link key={href} href={href} className={`flex flex-col items-center ${isActive ? "text-blue-500" : "text-gray-500"}`}>
+                    <Link key={href} href={href} className={`flex flex-col items-center ${isActive ? "text-blue-500 pink:text-pink-500" : "text-gray-500 pink:text-pink-300"}`}>
                         <Icon />
                         {label}
                     </Link>

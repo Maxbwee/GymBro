@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase";
 import type { User } from "@supabase/supabase-js";
 import { getWorkoutsWithExercises, calculateWeeklyStreak, calculateFavouriteExercise, calculateTotalLoggedWeight } from "../lib/workouts";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function ProfilePage() {
 
@@ -79,43 +80,51 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="flex flex-col items-center gap-6 p-6 pb-32 bg-zinc-50 min-h-screen">
+    <main className="flex flex-col items-center gap-6 p-6 pb-32 bg-zinc-50 pink:bg-pink-50 min-h-screen">
       <header className="flex flex-col items-center gap-3 mt-4">
-        <div className="w-20 h-20 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold shadow-md">
+        <div className="w-20 h-20 rounded-full bg-black pink:bg-pink-500 text-white flex items-center justify-center text-2xl font-bold shadow-md">
           {initials}
         </div>
-        <h1 className="text-2xl font-bold text-black">Your Profile</h1>
+        <h1 className="text-2xl font-bold text-black pink:text-pink-900">Your Profile</h1>
       </header>
 
-      <section className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col gap-1">
-        <span className="text-xs font-semibold uppercase text-zinc-400 tracking-wide">Email</span>
-        <p className="text-zinc-600 font-medium">{user?.email}</p>
+      <section className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col gap-1">
+        <span className="text-xs font-semibold uppercase text-zinc-400 pink:text-pink-400 tracking-wide">Email</span>
+        <p className="text-zinc-600 pink:text-pink-800 font-medium">{user?.email}</p>
       </section>
 
-      <section className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col gap-1">
-        <span className="text-xs font-semibold uppercase text-zinc-400 tracking-wide">Stats</span>
-        <p className="text-zinc-600 font-medium p-1">
+      <section className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col gap-1">
+        <span className="text-xs font-semibold uppercase text-zinc-400 pink:text-pink-400 tracking-wide">Stats</span>
+        <p className="text-zinc-600 pink:text-pink-800 font-medium p-1">
           Current streak: {currentStreak} {currentStreak === 1 ? "week" : "weeks"} {currentStreak > 0 && "🔥"}
         </p>
-        <p className="text-zinc-600 font-medium p-1">Total workouts logged: {totalWorkouts}</p>
-        <p className="text-zinc-600 font-medium p-1">Last logged workout: {lastLoggedDate ? lastLoggedDate.toLocaleDateString() : "N/A"}</p>
-        <p className="text-zinc-600 font-medium p-1">Most logged exercise: {favouriteExerciseName}</p>
-        <p className="text-zinc-600 font-medium p-1">Total logged weight: {totalLoggedWeight > 0 ? totalLoggedWeight + " kg" : ""}</p>
+        <p className="text-zinc-600 pink:text-pink-800 font-medium p-1">Total workouts logged: {totalWorkouts}</p>
+        <p className="text-zinc-600 pink:text-pink-800 font-medium p-1">Last logged workout: {lastLoggedDate ? lastLoggedDate.toLocaleDateString() : "N/A"}</p>
+        <p className="text-zinc-600 pink:text-pink-800 font-medium p-1">Most logged exercise: {favouriteExerciseName}</p>
+        <p className="text-zinc-600 pink:text-pink-800 font-medium p-1">Total logged weight: {totalLoggedWeight > 0 ? totalLoggedWeight + " kg" : ""}</p>
       </section>
 
-      <section className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col gap-1">
-        <span className="text-xs font-semibold uppercase text-zinc-400 tracking-wide">Feedback</span>
+      <section className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex items-center justify-between gap-1">
+        <div className="flex flex-col gap-1">
+          <span className="text-xs font-semibold uppercase text-zinc-400 pink:text-pink-400 tracking-wide">Appearance</span>
+          <p className="text-zinc-600 pink:text-pink-800 font-medium">Girlypop theme</p>
+        </div>
+        <ThemeToggle />
+      </section>
+
+      <section className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col gap-1">
+        <span className="text-xs font-semibold uppercase text-zinc-400 pink:text-pink-400 tracking-wide">Feedback</span>
         <textarea
           value={feedback}
           onChange={(e) => setFeedback(e.target.value)}
           placeholder="Tell us what you think!"
           rows={3}
-          className="text-black border border-zinc-200 rounded p-2 text-sm focus:outline-none focus:border-black resize-none"
+          className="text-black pink:text-pink-900 border border-zinc-200 pink:border-pink-200 rounded p-2 text-sm focus:outline-none focus:border-black pink:focus:border-pink-400 resize-none"
         />
         <button
           onClick={handleFeedbackSubmit}
           disabled={feedbackStatus === "sending" || !feedback.trim()}
-          className="self-end text-sm font-semibold text-black hover:text-zinc-700 disabled:opacity-30"
+          className="self-end text-sm font-semibold text-black pink:text-pink-600 hover:text-zinc-700 pink:hover:text-pink-700 disabled:opacity-30"
         >
           {feedbackStatus === "sending" ? "Sending..." : "Send"}
         </button>
@@ -128,7 +137,7 @@ export default function ProfilePage() {
       <div className="fixed bottom-24 left-6 right-6 sm:bottom-6 sm:left-auto sm:right-6 sm:w-56 flex flex-col items-center">
         <button
           onClick={() => supabase.auth.signOut()}
-          className="w-full h-12 rounded-full bg-red-500 text-white font-semibold shadow-md transition-colors hover:bg-red-600"
+          className="w-full h-12 rounded-full bg-red-500 pink:bg-rose-400 text-white font-semibold shadow-md transition-colors hover:bg-red-600 pink:hover:bg-rose-500"
         >
           Sign Out
         </button>

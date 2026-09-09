@@ -86,22 +86,22 @@ export default function WorkoutPage() {
     }
  
     return (
-        <main className="flex flex-col items-center gap-4 p-4 pb-32 bg-zinc-50 min-h-screen w-full">
+        <main className="flex flex-col items-center gap-4 p-4 pb-32 bg-zinc-50 pink:bg-pink-50 min-h-screen w-full">
             {!started ? (
                 <button
                     onClick={handleStart}
-                    className="mt-4 h-12 px-8 rounded-full bg-black text-white font-semibold shadow-md transition-colors hover:bg-zinc-800"
+                    className="mt-4 h-12 px-8 rounded-full bg-black pink:bg-pink-500 text-white font-semibold shadow-md transition-colors hover:bg-zinc-800 pink:hover:bg-pink-600"
                 >
                     Start Workout
                 </button>
             ) : (
                 <>
-                    <section className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col items-center gap-3">
+                    <section className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col items-center gap-3">
                         <input
                             type="text"
                             value={workoutName}
                             onChange={(e) => setWorkoutName(e.target.value)}
-                            className="text-xl font-bold text-center text-black w-full bg-transparent border-b border-zinc-200 focus:outline-none focus:border-black py-1"
+                            className="text-xl font-bold text-center text-black pink:text-pink-900 w-full bg-transparent border-b border-zinc-200 pink:border-pink-200 focus:outline-none focus:border-black pink:focus:border-pink-400 py-1"
                             placeholder="Workout Name"
                         />
                         <WorkoutTimer isRunning={started} startTime={startTime} />
@@ -123,7 +123,7 @@ export default function WorkoutPage() {
                     <div className="fixed bottom-24 left-6 right-6 sm:bottom-6 sm:left-auto sm:right-6 sm:w-56 flex flex-col items-center z-20">
                         <button
                             onClick={handleWorkoutComplete}
-                            className="w-full h-12 rounded-full bg-green-500 text-white font-semibold shadow-md transition-colors hover:bg-green-600"
+                            className="w-full h-12 rounded-full bg-green-500 pink:bg-pink-400 text-white font-semibold shadow-md transition-colors hover:bg-green-600 pink:hover:bg-pink-500"
                         >
                             Complete Workout
                         </button>

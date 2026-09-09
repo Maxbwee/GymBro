@@ -28,13 +28,13 @@ export default function WorkoutExerciseCard({ exercise, onChange, onDelete }: Wo
     }
 
     return (
-        <div className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col gap-3">
+        <div className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col gap-3">
             <div className="flex justify-between items-center">
-                <h3 className="font-bold text-black">{exercise.exerciseName}</h3>
-                <button className="text-sm text-red-500 hover:text-red-600" onClick={onDelete}>Delete</button>
+                <h3 className="font-bold text-black pink:text-pink-900">{exercise.exerciseName}</h3>
+                <button className="text-sm text-red-500 pink:text-rose-400 hover:text-red-600 pink:hover:text-rose-500" onClick={onDelete}>Delete</button>
             </div>
 
-            <div className="grid grid-cols-[2rem_1fr_1fr_2rem] gap-2 text-xs font-semibold text-zinc-400 uppercase tracking-wide px-1">
+            <div className="grid grid-cols-[2rem_1fr_1fr_2rem] gap-2 text-xs font-semibold text-zinc-400 pink:text-pink-400 uppercase tracking-wide px-1">
                 <span className="text-center">Set</span>
                 <span className="text-center">Kg</span>
                 <span className="text-center">Reps</span>
@@ -52,7 +52,7 @@ export default function WorkoutExerciseCard({ exercise, onChange, onDelete }: Wo
                 />
             ))}
 
-            <button onClick={handleAddSet} className="text-sm text-black font-semibold self-start hover:text-zinc-700">
+            <button onClick={handleAddSet} className="text-sm text-black pink:text-pink-600 font-semibold self-start hover:text-zinc-700 pink:hover:text-pink-700">
                 + Add Set
             </button>
         </div>

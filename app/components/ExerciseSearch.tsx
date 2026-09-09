@@ -78,26 +78,26 @@ export default function ExerciseSearch({ onSelect }: ExerciseSearchProps) {
     return (
         <div className="relative w-full">
             <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pink:text-pink-400" />
                 <input
                     type="text"
                     value={search}
                     onChange={(e) => handleExerciseSearch(e.target.value)}
                     placeholder="Search exercises..."
-                    className="w-full h-12 pl-11 pr-5 rounded-full bg-white border border-zinc-200 text-black placeholder:text-zinc-400 shadow-sm focus:outline-none focus:border-black"
+                    className="w-full h-12 pl-11 pr-5 rounded-full bg-white pink:bg-pink-100 border border-zinc-200 pink:border-pink-200 text-black pink:text-pink-900 placeholder:text-zinc-400 placeholder:pink:text-pink-300 shadow-sm focus:outline-none focus:border-black pink:focus:border-pink-400"
                 />
             </div>
 
             {exercises.length > 0 && (
                 <div
                     ref={listContainerRef}
-                    className="absolute top-full left-0 right-0 z-10 mt-1 bg-white border rounded shadow-lg max-h-80 overflow-y-auto"
+                    className="absolute top-full left-0 right-0 z-10 mt-1 bg-white pink:bg-pink-100 border pink:border-pink-200 rounded shadow-lg max-h-80 overflow-y-auto"
                 >
                     <ul className="list-none p-0 m-0 flex flex-col">
                         {exercises.map((exercise) => (
                             <li
                                 key={exercise.id}
-                                className="flex items-center gap-3 p-2 hover:bg-zinc-100 cursor-pointer"
+                                className="flex items-center gap-3 p-2 hover:bg-zinc-100 pink:hover:bg-pink-200 cursor-pointer"
                                 onClick={() => handleSelect(exercise)}
                             >
                                 {exercise.images?.[0] && (
@@ -111,13 +111,13 @@ export default function ExerciseSearch({ onSelect }: ExerciseSearchProps) {
                                         />
                                     </div>
                                 )}
-                                <span className="text-black text-sm">{exercise.name}</span>
+                                <span className="text-black pink:text-pink-900 text-sm">{exercise.name}</span>
                             </li>
                         ))}
                     </ul>
 
                     {(hasPrevPage || hasNextPage) && (
-                        <div className="flex justify-between items-center p-2 border-t text-black text-sm">
+                        <div className="flex justify-between items-center p-2 border-t pink:border-pink-200 text-black pink:text-pink-900 text-sm">
                             <button
                                 onClick={goToPrevPage}
                                 disabled={!hasPrevPage}
@@ -125,7 +125,7 @@ export default function ExerciseSearch({ onSelect }: ExerciseSearchProps) {
                             >
                                 Previous
                             </button>
-                            <span className="text-zinc-500">Page {page + 1}</span>
+                            <span className="text-zinc-500 pink:text-pink-400">Page {page + 1}</span>
                             <button
                                 onClick={goToNextPage}
                                 disabled={!hasNextPage}

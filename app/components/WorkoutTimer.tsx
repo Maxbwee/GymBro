@@ -39,7 +39,7 @@ export default function WorkoutTimer({ isRunning, startTime }: { isRunning: bool
     const secs = elapsed % 60;
 
     return (
-        <div className="text-2xl font-mono text-black">
+        <div className="text-2xl font-mono text-black pink:text-pink-900">
             {mins.toString().padStart(2, '0')}:{secs.toString().padStart(2, '0')}
         </div>
     )

@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+@custom-variant pink (&:where(.theme-pink, .theme-pink *));
+
 :root {
   --background: #fafafa;
   --foreground: #000000;
+}
+
+.theme-pink {
+  --background: #fdf2f8;
+  --foreground: #831843;
 }
 
 @theme inline {
@@ -16,4 +23,5 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
