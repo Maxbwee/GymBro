@@ -66,3 +66,56 @@ export async function saveWorkoutExercises(workoutId: string, exercises: Workout
         if (setsError) throw new Error(setsError.message);
     }
 }
+
+function getWeekStart(dateStr: string): number {
+  const date = new Date(dateStr + "T00:00:00");
+  const day = date.getDay(); // 0 = Sun, 1 = Mon, ... 6 = Sat
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  date.setDate(date.getDate() + diffToMonday);
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
+}
+
+export function calculateWeeklyStreak(workouts: { date: string }[]): number {
+  if (workouts.length === 0) return 0;
+
+  const weekStarts = new Set(workouts.map((w) => getWeekStart(w.date)));
+  const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
+
+  let cursor = getWeekStart(new Date().toISOString().split("T")[0]);
+  if (!weekStarts.has(cursor)) {
+    cursor -= oneWeekMs; // nothing logged yet this week — check last week instead
+  }
+
+  let streak = 0;
+  while (weekStarts.has(cursor)) {
+    streak++;
+    cursor -= oneWeekMs;
+  }
+
+  return streak;
+}
+
+
+export function calculateFavouriteExercise(workouts: { workout_exercises: { exercises: { name: string } }[] }[]): string {
+  const exerciseCount: { [key: string]: number } = {};
+  workouts.forEach((workout) => {
+    workout.workout_exercises.forEach((workoutExercise) => {
+      const exerciseName = workoutExercise.exercises.name;
+      exerciseCount[exerciseName] = (exerciseCount[exerciseName] ?? 0) + 1;
+    });
+  });
+  return Object.keys(exerciseCount).reduce((a, b) => exerciseCount[a] > exerciseCount[b] ? a : b, "");
+}
+
+export function calculateTotalLoggedWeight(workouts: { workout_exercises: { sets: { weight: number; reps: number }[] }[] }[]): number {
+  return workouts.reduce((total, workout) => {
+          const workoutWeight = workout.workout_exercises.reduce((exerciseTotal: number, workoutExercise: { sets: { weight: number; reps: number }[] }) => {
+            const exerciseWeight = workoutExercise.sets.reduce((setTotal: number, set: { weight: number; reps: number }) => {
+              return setTotal + (set.weight * set.reps);
+            }, 0);
+            return exerciseTotal + exerciseWeight;
+          }, 0);
+          return total + workoutWeight;
+  }, 0);
+}

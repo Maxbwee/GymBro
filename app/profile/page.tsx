@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase";
 import type { User } from "@supabase/supabase-js";
-import { getWorkoutsWithExercises } from "../lib/workouts";
+import { getWorkoutsWithExercises, calculateWeeklyStreak, calculateFavouriteExercise, calculateTotalLoggedWeight } from "../lib/workouts";
 
 export default function ProfilePage() {
 
@@ -44,52 +44,17 @@ export default function ProfilePage() {
     const getUserWorkoutStats = async () => {
       const workouts = await getWorkoutsWithExercises();
       if (user) {
-        const totalLoggedWeight = workouts.reduce((total, workout) => {
-          const workoutWeight = workout.workout_exercises.reduce((exerciseTotal: number, workoutExercise: { sets: { weight: number; reps: number }[] }) => {
-            const exerciseWeight = workoutExercise.sets.reduce((setTotal: number, set: { weight: number; reps: number }) => {
-              return setTotal + (set.weight * set.reps);
-            }, 0);
-            return exerciseTotal + exerciseWeight;
-          }, 0);
-          return total + workoutWeight;
-        }, 0);
-        setTotalLoggedWeight(totalLoggedWeight);
+        setTotalLoggedWeight(calculateTotalLoggedWeight(workouts));
         setTotalWorkouts(workouts.length);
-        setLastLoggedDate(workouts.date)
+        setLastLoggedDate(workouts[0]?.date ? new Date(workouts[0].date) : null);
+        setCurrentStreak(calculateWeeklyStreak(workouts));
+        setFavouriteExerciseName(calculateFavouriteExercise(workouts));
       }
-        console.log(workouts);
-      
     };
     getUserWorkoutStats();
-  },[user]);
-
-    useEffect(() => {
-    const fetchFavouriteExercise = async () => {
-      const name = await favouriteExercise();
-      setFavouriteExerciseName(name);
-    };
-    fetchFavouriteExercise();
   }, [user]);
 
-
   const initials = user?.email?.charAt(0).toUpperCase() ?? "?";
-  
-  const favouriteExercise = async () => {
-    const workouts = await getWorkoutsWithExercises();
-    const exerciseCount: { [key: string]: number } = {};
-    workouts.forEach((workout) => {
-      workout.workout_exercises.forEach((workoutExercise) => {
-        const exerciseName = workoutExercise.exercises.name;
-        if (exerciseCount[exerciseName]) {
-          exerciseCount[exerciseName]++;
-        } else {
-          exerciseCount[exerciseName] = 1;
-        }
-      });
-    });
-    return Object.keys(exerciseCount).reduce((a, b) => exerciseCount[a] > exerciseCount[b] ? a : b, "");
-  };
-
 
   async function handleFeedbackSubmit() {
     if (!feedback.trim()) return;
@@ -129,10 +94,13 @@ export default function ProfilePage() {
 
       <section className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col gap-1">
         <span className="text-xs font-semibold uppercase text-zinc-400 tracking-wide">Stats</span>
+        <p className="text-zinc-600 font-medium p-1">
+          Current streak: {currentStreak} {currentStreak === 1 ? "week" : "weeks"} {currentStreak > 0 && "🔥"}
+        </p>
         <p className="text-zinc-600 font-medium p-1">Total workouts logged: {totalWorkouts}</p>
-        <p className="text-zinc-600 font-medium p-1">Current streak</p>
-        <p className="text-zinc-600 font-medium p-1">Total logged weight: {totalLoggedWeight > 0 ? totalLoggedWeight + " kg" : ""}</p>
+        <p className="text-zinc-600 font-medium p-1">Last logged workout: {lastLoggedDate ? lastLoggedDate.toLocaleDateString() : "N/A"}</p>
         <p className="text-zinc-600 font-medium p-1">Most logged exercise: {favouriteExerciseName}</p>
+        <p className="text-zinc-600 font-medium p-1">Total logged weight: {totalLoggedWeight > 0 ? totalLoggedWeight + " kg" : ""}</p>
       </section>
 
       <section className="w-full max-w-sm bg-white rounded-xl shadow p-5 flex flex-col gap-1">
