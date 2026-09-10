@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import type { User } from "@supabase/supabase-js";
 import { getWorkoutsWithExercises, calculateWeeklyStreak, calculateFavouriteExercise, calculateTotalLoggedWeight } from "../lib/workouts";
 import ThemeToggle from "../components/ThemeToggle";
+import Loading from "../components/Loading";
 
 export default function ProfilePage() {
 
@@ -43,6 +44,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const getUserWorkoutStats = async () => {
+      setLoading(true);
       const workouts = await getWorkoutsWithExercises();
       if (user) {
         setTotalLoggedWeight(calculateTotalLoggedWeight(workouts));
@@ -50,6 +52,7 @@ export default function ProfilePage() {
         setLastLoggedDate(workouts[0]?.date ? new Date(workouts[0].date) : null);
         setCurrentStreak(calculateWeeklyStreak(workouts));
         setFavouriteExerciseName(calculateFavouriteExercise(workouts));
+        setLoading(false);
       }
     };
     getUserWorkoutStats();
@@ -80,6 +83,8 @@ export default function ProfilePage() {
   }
 
   return (
+
+    loading ? <Loading /> :
     <main className="flex flex-col items-center gap-6 p-6 pb-32 bg-zinc-50 pink:bg-pink-50 min-h-screen">
       <header className="flex flex-col items-center gap-3 mt-4">
         <div className="w-20 h-20 rounded-full bg-black pink:bg-pink-500 text-white flex items-center justify-center text-2xl font-bold shadow-md">

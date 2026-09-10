@@ -7,7 +7,7 @@ import type { User } from "@supabase/supabase-js";
 import type { WorkoutWithExercises } from "./types/workoutType";
 import PastWorkoutCard from "./components/PastWorkoutCard";
 import { getWorkoutsWithExercises } from "./lib/workouts";
-
+import Loading from "./components/Loading";
 
 
 
@@ -42,12 +42,18 @@ export default function Home() {
   }, [router]);
 
     useEffect(() => {
-    if(user) {
-      getWorkoutsWithExercises().then(setWorkouts)
+    const fetchWorkouts = async () => {
+      setLoading(true);
+      if(user) {
+        await getWorkoutsWithExercises().then(setWorkouts);
+      }
+      setLoading(false);
     }
+    fetchWorkouts();
+    
   }, [user]);
 
-  if (loading) return null
+  if (loading) return <Loading />;
 
 
   return (
@@ -58,9 +64,6 @@ export default function Home() {
           </header>
 
           <section className="w-full max-w-sm flex flex-col gap-4">
-            {workouts.length === 0 && (
-              <p className="text-center text-zinc-400 pink:text-pink-300 text-sm">No past workouts found.</p>
-            )}
             {workouts.map((workout) => (
               <PastWorkoutCard key={workout.id} workout={workout} />
             ))}
