@@ -11,7 +11,7 @@ import type { User } from "@supabase/supabase-js";
 import { useRouter } from "next/dist/client/components/navigation";
 import { saveWorkout, saveWorkoutExercises } from "../lib/workouts";
 import { useWorkoutSession } from "../context/WorkoutSessionContext";
-
+import  Loading  from "../components/Loading"; 
 
 export default function WorkoutPage() {
 
@@ -131,12 +131,18 @@ export default function WorkoutPage() {
                     ))}
 
                     <div className="fixed bottom-24 left-6 right-6 sm:bottom-6 sm:left-auto sm:right-6 sm:w-56 flex flex-col items-center z-20">
-                        <button
+                        {
+                            loading ? (
+                                <Loading />
+                            ) : 
+                             <button
                             onClick={handleWorkoutComplete}
                             className="w-full h-12 rounded-full bg-green-500 pink:bg-pink-400 text-white font-semibold shadow-md transition-colors hover:bg-green-600 pink:hover:bg-pink-500"
                         >
                             Complete Workout
                         </button>
+                        }
+                       
                     </div>
                 </>
             )}
