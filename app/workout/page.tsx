@@ -10,17 +10,19 @@ import { WorkoutExerciseDraft } from "../types/workoutType";
 import type { User } from "@supabase/supabase-js";
 import { useRouter } from "next/dist/client/components/navigation";
 import { saveWorkout, saveWorkoutExercises } from "../lib/workouts";
+import { useWorkoutSession } from "../context/WorkoutSessionContext";
+
 
 export default function WorkoutPage() {
 
 
-    const [started, setStarted] = useState(false);
-    const [startTime, setStartTime] = useState<number>(0);
-    const [exercises, setExercises] = useState<WorkoutExerciseDraft[]>([]);
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-    const [workoutName, setWorkoutName] = useState<string>("");
     const router = useRouter();
+    const {
+        started, startTime, workoutName, exercises,
+        startWorkout, setWorkoutName, addExercise, updateExercise, removeExercise, resetWorkout,
+    } = useWorkoutSession();
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -44,25 +46,23 @@ export default function WorkoutPage() {
     }, [router]);
 
     function handleStart() {
-        setStartTime(Date.now());
-        setStarted(true);
+        startWorkout();
     }
 
     function handleAddExercise(exercise: Exercise) {
-        const newDraft: WorkoutExerciseDraft = {
+        addExercise({
             exerciseId: exercise.id,
             exerciseName: exercise.name,
             sets: [{ id: crypto.randomUUID(), weight: 0, reps: 0 }],
-        };
-        setExercises((prev) => [...prev, newDraft]);
+        });
     }
 
     function handleExerciseChange(index: number, updated: WorkoutExerciseDraft) {
-        setExercises((prev) => prev.map((ex, i) => (i === index ? updated : ex)));
+        updateExercise(index, updated);
     }
 
     function handleExerciseDelete(index: number) {
-        setExercises((prev) => prev.filter((_, i) => i !== index));
+        removeExercise(index);
     }
 
     async function handleWorkoutComplete() {
@@ -71,12 +71,10 @@ export default function WorkoutPage() {
 
         try {
             const workoutDate = new Date().toISOString().split('T')[0];
-            const workout = await saveWorkout(user.id, workoutName, workoutDate);  
+            const workout = await saveWorkout(user.id, workoutName, workoutDate);
             await saveWorkoutExercises(workout.id, exercises);
 
-            setStarted(false);
-            setExercises([]);
-            setWorkoutName("");
+            resetWorkout();
             router.push('/');
         } catch (error) {
             console.error("Failed to save workout:", error);
@@ -84,7 +82,11 @@ export default function WorkoutPage() {
             setLoading(false);
         }
     }
- 
+
+    function handleWorkoutCancel() {
+        resetWorkout();
+    }
+
     return (
         <main className="flex flex-col items-center gap-4 p-4 pb-32 bg-zinc-50 pink:bg-pink-50 min-h-screen w-full">
             {!started ? (
@@ -97,14 +99,22 @@ export default function WorkoutPage() {
             ) : (
                 <>
                     <section className="w-full max-w-sm bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col items-center gap-3">
-                        <input
-                            type="text"
-                            value={workoutName}
-                            onChange={(e) => setWorkoutName(e.target.value)}
-                            className="text-xl font-bold text-center text-black pink:text-pink-900 w-full bg-transparent border-b border-zinc-200 pink:border-pink-200 focus:outline-none focus:border-black pink:focus:border-pink-400 py-1"
-                            placeholder="Workout Name"
-                        />
+                        <div className="w-full flex justify-between items-center">
+                            <input
+                                type="text"
+                                value={workoutName}
+                                onChange={(e) => setWorkoutName(e.target.value)}
+                                className="text-xl font-bold text-center text-black pink:text-pink-900 flex-1 bg-transparent border-b border-zinc-200 pink:border-pink-200 focus:outline-none focus:border-black pink:focus:border-pink-400 py-1"
+                                placeholder="Workout Name"
+                            />
+                        </div>
                         <WorkoutTimer isRunning={started} startTime={startTime} />
+                        <button
+                            onClick={handleWorkoutCancel}
+                            className="text-xs text-red-500 pink:text-pink-300 hover:text-red-600 pink:hover:text-rose-400 underline underline-offset-2"
+                        >
+                            Cancel Workout
+                        </button>
                     </section>
 
                     <div className="w-full max-w-sm">

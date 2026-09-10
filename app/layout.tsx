@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import MobileNavBar from "./components/MobileNavBar";
 import { ThemeProvider } from "./context/ThemeContext";
+import { WorkoutSessionProvider } from "./context/WorkoutSessionContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,9 +47,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col pt-6 sm:pt-0 pb-16 sm:pb-10">
         <ThemeProvider>
-          <Navbar />
-          {children}
-          <MobileNavBar />
+          <WorkoutSessionProvider>
+            <Navbar />
+            {children}
+            <MobileNavBar />
+          </WorkoutSessionProvider>
         </ThemeProvider>
       </body>
     </html>
