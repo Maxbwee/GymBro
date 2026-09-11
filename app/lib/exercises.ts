@@ -1,4 +1,5 @@
 import {supabase} from './supabase';
+import type { MuscleGroupFilter } from "../types/exercise";
 
 export async function getExercises() {
     const { data, error } = await supabase
@@ -42,3 +43,20 @@ export async function getExercisesByEquipment(equipment: string) {
     }
     return data;
 };
+
+export async function getExercisesByMuscleGroup(primaryMuscle: MuscleGroupFilter, page: number = 0) {
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    let query = supabase.from('exercises').select('*', { count: 'exact' });
+    if (primaryMuscle !== 'all') {
+        query = query.contains('primary_muscles', [primaryMuscle]);
+    }
+
+    const { data, error, count } = await query.range(from, to);
+    if (error) {
+        console.error(`Error fetching exercises with primary muscle group ${primaryMuscle}:`, error);
+        return { data: null, count: 0 };
+    }
+    return { data, count: count ?? 0 };
+}

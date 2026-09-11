@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dumbbell, House, User } from "lucide-react";
+import { BicepsFlexed, Dumbbell, House, User,  } from "lucide-react";
 
 
 export default function MobileNavBar() {
@@ -10,8 +10,9 @@ export default function MobileNavBar() {
     const navItems = [
         { href: "/", icon: House, label: "Home" },
         { href: "/workout", icon: Dumbbell, label: "Workout" },
+        { href: "/exercises", icon: BicepsFlexed, label: "Exercises" },
         { href: "/profile", icon: User, label: "Profile" },
-        
+
     ]
 
     const pathname = usePathname();
