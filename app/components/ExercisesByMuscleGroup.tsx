@@ -71,7 +71,7 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
                 <button
                     type="button"
                     onClick={() => setIsDropdownOpen((open) => !open)}
-                    className="w-full h-12 px-4 flex items-center justify-between rounded-full bg-white pink:bg-pink-100 border border-zinc-200 pink:border-pink-200 text-black pink:text-pink-900 text-base shadow-sm focus:outline-none focus:border-black pink:focus:border-pink-400"
+                    className="w-full px-5 py-3 flex items-center justify-between rounded-full bg-white pink:bg-pink-100 border border-zinc-200 pink:border-pink-200 text-black pink:text-pink-900 text-base shadow-sm focus:outline-none focus:border-black pink:focus:border-pink-400"
                 >
                     <span className="capitalize">{selectedMuscleGroup === "all" ? "All Muscle Groups" : selectedMuscleGroup}</span>
                     <ChevronDown className={`w-4 h-4 text-zinc-400 pink:text-pink-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} />
@@ -100,7 +100,7 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
                 {exercises.map((exercise) => (
                     <li
                         key={exercise.id}
-                        className="bg-white pink:bg-pink-100 rounded-xl shadow p-4 flex flex-col gap-1"
+                        className="bg-white pink:bg-pink-100 rounded-xl shadow p-6 flex flex-col gap-1"
                     >
                         <h3 className="text-lg font-semibold text-black pink:text-pink-900">{exercise.name}</h3>
                         <p className="text-sm text-zinc-500 pink:text-pink-400">Equipment: {exercise.equipment}</p>
