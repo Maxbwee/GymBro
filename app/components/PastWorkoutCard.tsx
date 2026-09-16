@@ -27,7 +27,7 @@ export default function PastWorkoutCard({ workout, onClick }: PastWorkoutCardPro
                                 <ul className="list-inside indent-1 text-xs text-zinc-500 pink:text-pink-500 p-2">
                                     {workout.sets.map((set, index) => (
                                         <li key={index}>
-                                            Set {set.set_number}: {set.weight}kg x {set.reps} reps
+                                            Set {set.set_number}: {set.reps} reps x {set.weight}kg
                                         </li>
                                     ))}
                                 </ul>

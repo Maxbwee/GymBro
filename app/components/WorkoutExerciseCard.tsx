@@ -36,8 +36,8 @@ export default function WorkoutExerciseCard({ exercise, onChange, onDelete }: Wo
 
             <div className="grid grid-cols-[2rem_1fr_1fr_2rem] gap-2 text-xs font-semibold text-zinc-400 pink:text-pink-400 uppercase tracking-wide px-1">
                 <span className="text-center">Set</span>
-                <span className="text-center">Kg</span>
                 <span className="text-center">Reps</span>
+                <span className="text-center">Kg</span>
                 <span></span>
             </div>
 

@@ -44,9 +44,7 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
     }
 
     function scrollListToTop() {
-        if (listContainerRef.current) {
-            listContainerRef.current.scrollTop = 0;
-        }
+        listContainerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function goToNextPage() {
@@ -66,7 +64,7 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
     const hasPrevPage = page > 0;
 
     return (
-        <div className="w-full max-w-sm flex flex-col gap-4">
+        <div className="w-full max-w-sm flex flex-col gap-4" ref={listContainerRef}>
             <div ref={dropdownRef} className="relative">
                 <button
                     type="button"

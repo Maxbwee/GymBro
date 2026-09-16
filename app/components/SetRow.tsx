@@ -36,20 +36,21 @@ export default function SetRow({ setNumber, weight, reps, onChange, onRemove }: 
             <span className="font-bold text-sm text-black pink:text-pink-900 text-center">{setNumber}</span>
             <input
                 type="text"
-                inputMode="decimal"
-                value={weightInput}
-                onChange={(e) => handleWeightChange(e.target.value)}
-                placeholder="Kg"
-                className="border border-zinc-300 pink:border-pink-200 rounded px-2 py-1 w-full text-black pink:text-pink-900 focus:outline-none focus:border-black pink:focus:border-pink-400"
-            />
-            <input
-                type="text"
                 inputMode="numeric"
                 value={repsInput}
                 onChange={(e) => handleRepsChange(e.target.value)}
                 placeholder="Reps"
                 className="border border-zinc-300 pink:border-pink-200 rounded px-2 py-1 w-full text-black pink:text-pink-900 focus:outline-none focus:border-black pink:focus:border-pink-400"
             />
+            <input
+                type="text"
+                inputMode="decimal"
+                value={weightInput}
+                onChange={(e) => handleWeightChange(e.target.value)}
+                placeholder="Kg"
+                className="border border-zinc-300 pink:border-pink-200 rounded px-2 py-1 w-full text-black pink:text-pink-900 focus:outline-none focus:border-black pink:focus:border-pink-400"
+            />
+
             <button
                 type="button"
                 onClick={onRemove}
