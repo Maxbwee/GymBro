@@ -30,7 +30,6 @@ export async function getWorkoutsWithExercises() {
     return data;
 }
 
-
 export async function saveWorkout(userId: string, name: string, date: string) {
     const { data, error } = await supabase
     .from('workouts')
@@ -65,6 +64,16 @@ export async function saveWorkoutExercises(workoutId: string, exercises: Workout
         const { error: setsError } = await supabase.from('sets').insert(setsPayload);
         if (setsError) throw new Error(setsError.message);
     }
+}
+
+export async function deleteWorkout(workoutId: string) {
+   const { error } = await supabase
+   .from('workouts')
+   .delete()
+   .eq('id', workoutId);
+   if (error) {
+       throw new Error(error.message);
+   }
 }
 
 function getWeekStart(dateStr: string): number {
