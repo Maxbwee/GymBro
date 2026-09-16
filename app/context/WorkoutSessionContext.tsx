@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useSyncExternalStore, ReactNode } from "react";
 import type { WorkoutExerciseDraft } from "../types/workoutType";
 
 type WorkoutSessionState = {
@@ -30,28 +30,53 @@ const defaultState: WorkoutSessionState = {
 
 const WorkoutSessionContext = createContext<WorkoutSessionContextType | undefined>(undefined);
 
+function subscribeNoop() {
+    return () => {};
+}
+
 export function WorkoutSessionProvider({ children }: { children: ReactNode }) {
-    // Lazy initializer reads localStorage once, synchronously, on first render
-    // instead of via an effect + setState (avoids an extra cascading render).
-    const [state, setState] = useState<WorkoutSessionState>(() => {
-        if (typeof window === "undefined") return defaultState;
+    // Always start from defaultState so the very first client render (hydration)
+    // matches what the server rendered — no hydration mismatch.
+    const [state, setState] = useState<WorkoutSessionState>(defaultState);
+    const [isRestored, setIsRestored] = useState(false);
+
+    // Tells us once the client has finished hydrating. useSyncExternalStore returns
+    // the server snapshot (false) during SSR *and* the hydrating client render — so
+    // they always match — then re-renders once on the client with the real value
+    // (true) right after mount, via React's own update mechanism. This never calls
+    // setState inside a useEffect body, so it doesn't trigger the
+    // react-hooks/set-state-in-effect rule.
+    const isHydrated = useSyncExternalStore(subscribeNoop, () => true, () => false);
+
+    // Restore once, directly during render (guarded by the isRestored state itself,
+    // so it only ever runs a single time) instead of inside an effect — this is
+    // React's documented pattern for adjusting state in response to newly available
+    // information without an extra effect-driven render, and it avoids the lint rule
+    // entirely since nothing is set inside useEffect here.
+    if (isHydrated && !isRestored) {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? { ...defaultState, ...JSON.parse(stored) } : defaultState;
+            if (stored) {
+                setState({ ...defaultState, ...JSON.parse(stored) });
+            }
         } catch {
-            return defaultState;
+            // ignore malformed storage
         }
-    });
+        setIsRestored(true);
+    }
 
     // Keeps localStorage in sync with the latest in-progress workout so it
     // survives full page reloads / the app being backgrounded and reopened.
+    // Guarded on isRestored so we never wipe existing storage with defaultState
+    // before the restore above has had a chance to run.
     useEffect(() => {
+        if (!isRestored) return;
         if (state.started) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         } else {
             localStorage.removeItem(STORAGE_KEY);
         }
-    }, [state]);
+    }, [state, isRestored]);
 
     function startWorkout() {
         setState({ started: true, startTime: Date.now(), workoutName: "", exercises: [] });

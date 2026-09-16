@@ -22,7 +22,7 @@ export default function MobileNavBar() {
     }
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 flex items-center justify-around p-4 bg-white pink:bg-pink-50 shadow sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-20 flex items-center justify-around p-4 bg-white pink:bg-pink-50 shadow sm:hidden">
             {navItems.map(({href, label, icon: Icon}) => {
                 const isActive = pathname === href; 
                 return (
