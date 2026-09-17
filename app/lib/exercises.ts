@@ -53,7 +53,7 @@ export async function getExercisesByMuscleGroup(primaryMuscle: MuscleGroupFilter
         query = query.contains('primary_muscles', [primaryMuscle]);
     }
 
-    const { data, error, count } = await query.range(from, to);
+    const { data, error, count } = await query.order('name', { ascending: true }).range(from, to);
     if (error) {
         console.error(`Error fetching exercises with primary muscle group ${primaryMuscle}:`, error);
         return { data: null, count: 0 };

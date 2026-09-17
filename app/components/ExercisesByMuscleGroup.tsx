@@ -5,6 +5,7 @@ import type { MuscleGroupFilter } from "../types/exercise";
 import { MUSCLE_GROUPS } from "../types/exercise";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
+import Loading from "./Loading";
 
 export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { primaryMuscle?: MuscleGroupFilter }) {
     const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -14,17 +15,21 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const listContainerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [loading, setLoading] = useState(false);
 
     const PAGE_SIZE = 10;
 
 
     useEffect(() => {
         async function fetchExercises() {
+            setLoading(true);
             const { data, count } = await getExercisesByMuscleGroup(selectedMuscleGroup, page);
             setExercises(data || []);
             setTotalCount(count ?? 0);
+            setLoading(false);
         }
         fetchExercises();
+        
     }, [selectedMuscleGroup, page]);
 
     useEffect(() => {
@@ -48,20 +53,25 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
     }
 
     function goToNextPage() {
+        setLoading(true);
         const nextPage = page + 1;
         setPage(nextPage);
-
         scrollListToTop();
+        setLoading(false);
     }
 
     function goToPrevPage() {
+        setLoading(true);
         const prevPage = Math.max(page - 1, 0);
         setPage(prevPage);
         scrollListToTop();
+        setLoading(false);
     }
 
     const hasNextPage = (page + 1) * PAGE_SIZE < totalCount;
     const hasPrevPage = page > 0;
+
+      if (loading) return <Loading />;
 
     return (
         <div className="w-full max-w-sm flex flex-col gap-4" ref={listContainerRef}>
