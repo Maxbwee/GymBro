@@ -64,6 +64,15 @@ export default function Home() {
     }
   };
 
+  const handleWorkoutUpdate = async () => {
+    try {
+      setLoading(true);
+      await getWorkoutsWithExercises().then(setWorkouts);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
         <main className="flex flex-col items-center gap-6 p-6 pb-32 bg-zinc-50 pink:bg-pink-50 min-h-screen">
           <header className="flex flex-col items-center gap-1 mt-4 text-center">
@@ -73,7 +82,7 @@ export default function Home() {
 
           <section className="w-full max-w-sm flex flex-col gap-4">
             {workouts.map((workout) => (
-              <PastWorkoutCard key={workout.id} workout={workout} onDelete={handleWorkoutDelete} />
+              <PastWorkoutCard key={workout.id} workout={workout} onDelete={handleWorkoutDelete} onUpdate={handleWorkoutUpdate} />
             ))}
           </section>
         </main>
