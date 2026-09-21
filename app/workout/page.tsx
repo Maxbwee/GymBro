@@ -11,7 +11,8 @@ import type { User } from "@supabase/supabase-js";
 import { useRouter } from "next/dist/client/components/navigation";
 import { saveWorkout, saveWorkoutExercises } from "../lib/workouts";
 import { useWorkoutSession } from "../context/WorkoutSessionContext";
-import  Loading  from "../components/Loading"; 
+import Loading from "../components/Loading";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 export default function WorkoutPage() {
 
@@ -19,6 +20,8 @@ export default function WorkoutPage() {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
+    const [showCancelWorkoutDialog, setShowCancelWorkoutDialog] = useState(false);
+    const [showCompleteWorkoutDialog, setShowCompleteWorkoutDialog] = useState(false);
     const {
         started, startTime, workoutName, exercises,
         startWorkout, setWorkoutName, addExercise, updateExercise, removeExercise, resetWorkout,
@@ -80,11 +83,13 @@ export default function WorkoutPage() {
             console.error("Failed to save workout:", error);
         } finally {
             setLoading(false);
+            setShowCompleteWorkoutDialog(false);
         }
     }
 
     function handleWorkoutCancel() {
         resetWorkout();
+        setShowCancelWorkoutDialog(false);
     }
 
     return (
@@ -110,11 +115,20 @@ export default function WorkoutPage() {
                         </div>
                         <WorkoutTimer isRunning={started} startTime={startTime} />
                         <button
-                            onClick={handleWorkoutCancel}
+                            onClick={() => setShowCancelWorkoutDialog(true)}
                             className="text-xs text-red-500 pink:text-pink-300 hover:text-red-600 pink:hover:text-rose-400 underline underline-offset-2"
                         >
                             Cancel Workout
                         </button>
+                        <ConfirmDialog
+                            open={showCancelWorkoutDialog}
+                            title="Cancel Workout"
+                            message="Are you sure you want to cancel this workout? This action cannot be undone."
+                            onConfirm={handleWorkoutCancel}
+                            onCancel={() => setShowCancelWorkoutDialog(false)}
+                            confirmLabel="Delete"
+                            variant="danger"
+                        />
                     </section>
 
                     <div className="w-full max-w-sm">
@@ -134,15 +148,26 @@ export default function WorkoutPage() {
                         {
                             loading ? (
                                 <Loading />
-                            ) : 
-                             <button
-                            onClick={handleWorkoutComplete}
-                            className="w-full h-12 rounded-full bg-green-500 pink:bg-pink-400 text-white font-semibold shadow-md transition-colors hover:bg-green-600 pink:hover:bg-pink-500"
-                        >
-                            Complete Workout
-                        </button>
+                            ) :
+                                <>
+                                    <button
+                                        onClick={() => setShowCompleteWorkoutDialog(true)}
+                                        className="w-full h-12 rounded-full bg-green-500 pink:bg-pink-400 text-white font-semibold shadow-md transition-colors hover:bg-green-600 pink:hover:bg-pink-500"
+                                    >
+                                        Complete Workout
+                                    </button>
+                                    <ConfirmDialog
+                                        open={showCompleteWorkoutDialog}
+                                        title="Complete Workout"
+                                        message="Are you sure you want to complete this workout?"
+                                        onConfirm={handleWorkoutComplete}
+                                        onCancel={() => setShowCompleteWorkoutDialog(false)}
+                                        confirmLabel="Complete"
+                                        variant="default"
+                                    />
+                                </>
                         }
-                       
+
                     </div>
                 </>
             )}

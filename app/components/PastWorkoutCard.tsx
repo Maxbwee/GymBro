@@ -54,13 +54,15 @@ export default function PastWorkoutCard({ workout, onClick, onDelete, onUpdate }
                     Delete
                 </button>
             </div>
-                <ConfirmDialog
-                    open={showConfirmDialog}
-                    title="Delete Workout"
-                    message="Are you sure you want to delete this workout? This action cannot be undone."
-                    onConfirm={handleConfirmDelete}
-                    onCancel={handleCancelDelete}
-                />
+            <ConfirmDialog
+                open={showConfirmDialog}
+                title="Delete Workout"
+                message="Are you sure you want to delete this workout? This action cannot be undone."
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+                confirmLabel="Delete"
+                variant="danger"
+            />
             <div className="flex justify-between items-center">
                 <input
                     type="text"
