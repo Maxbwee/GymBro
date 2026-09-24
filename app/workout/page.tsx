@@ -8,7 +8,7 @@ import { Exercise } from "../types/exercise";
 import WorkoutExerciseCard from "../components/WorkoutExerciseCard";
 import { WorkoutExerciseDraft } from "../types/workoutType";
 import type { User } from "@supabase/supabase-js";
-import { useRouter } from "next/dist/client/components/navigation";
+import { useRouter } from "next/navigation";
 import { saveWorkout, saveWorkoutExercises } from "../lib/workouts";
 import { useWorkoutSession } from "../context/WorkoutSessionContext";
 import Loading from "../components/Loading";
@@ -17,7 +17,7 @@ import ConfirmDialog from "../components/ConfirmDialog";
 export default function WorkoutPage() {
 
 
-    const [loading, setLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
     const [showCancelWorkoutDialog, setShowCancelWorkoutDialog] = useState(false);
@@ -33,7 +33,6 @@ export default function WorkoutPage() {
                 router.push('/login')
             } else {
                 setUser(session.user)
-                setLoading(false)
             }
         })
 
@@ -69,8 +68,8 @@ export default function WorkoutPage() {
     }
 
     async function handleWorkoutComplete() {
-        if (!user) return;
-        setLoading(true);
+        if (!user || isSaving) return; // guard against any duplicate/double invocation
+        setIsSaving(true);
 
         try {
             const workoutDate = new Date().toISOString().split('T')[0];
@@ -82,7 +81,7 @@ export default function WorkoutPage() {
         } catch (error) {
             console.error("Failed to save workout:", error);
         } finally {
-            setLoading(false);
+            setIsSaving(false);
             setShowCompleteWorkoutDialog(false);
         }
     }
@@ -146,7 +145,7 @@ export default function WorkoutPage() {
 
                     <div className="fixed bottom-24 left-6 right-6 sm:bottom-6 sm:left-auto sm:right-6 sm:w-56 flex flex-col items-center z-20">
                         {
-                            loading ? (
+                            isSaving ? (
                                 <Loading />
                             ) :
                                 <>
