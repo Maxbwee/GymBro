@@ -43,13 +43,20 @@ export default function PastWorkoutCard({ workout, onClick, onDelete, onUpdate }
 
     const formattedDate = new Date(workout.date).toLocaleDateString("en-GB");
 
+    const formatDuration = (durationSeconds: number | null) => {
+        if (durationSeconds === null) return "";
+        const mins = Math.floor(durationSeconds / 60);
+        const secs = durationSeconds % 60;
+        return `(${mins}m ${secs}s)`;
+    };
+
     return (
         <div
             onClick={onClick}
             className="w-full bg-white pink:bg-pink-100 rounded-xl shadow p-5 flex flex-col gap-2 cursor-pointer hover:bg-zinc-50 pink:hover:bg-pink-200 transition-colors"
         >
             <div className="flex justify-between items-start">
-                <p className="text-xs text-zinc-400 pink:text-pink-400">{formattedDate}</p>
+                <p className="text-xs text-zinc-400 pink:text-pink-400">{formattedDate} {workout.duration_seconds !== null ? `Duration: ${formatDuration(workout.duration_seconds)}` : ""}</p>
                 <button onClick={(e) => { e.stopPropagation(); setShowConfirmDialog(true); }} className="text-sm text-red-500 pink:text-rose-400 hover:text-red-600 pink:hover:text-rose-500">
                     Delete
                 </button>

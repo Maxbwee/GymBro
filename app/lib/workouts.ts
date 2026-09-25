@@ -30,10 +30,10 @@ export async function getWorkoutsWithExercises() {
   return data;
 }
 
-export async function saveWorkout(userId: string, name: string, date: string) {
+export async function saveWorkout(userId: string, name: string, date: string, durationSeconds: number | null) {
   const { data, error } = await supabase
     .from('workouts')
-    .insert([{ user_id: userId, name, date }])
+    .insert([{ user_id: userId, name, date, duration_seconds: durationSeconds }])
     .select()
     .single();
   if (error) {

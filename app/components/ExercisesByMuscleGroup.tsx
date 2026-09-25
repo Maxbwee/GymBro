@@ -68,6 +68,8 @@ export default function ExercisesByMuscleGroup({ primaryMuscle = "all" }: { prim
         setLoading(false);
     }
 
+    // todo go to page function
+
     const hasNextPage = (page + 1) * PAGE_SIZE < totalCount;
     const hasPrevPage = page > 0;
 

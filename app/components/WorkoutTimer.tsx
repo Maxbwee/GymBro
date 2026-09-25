@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 
 
 export default function WorkoutTimer({ isRunning, startTime }: { isRunning: boolean, startTime: number }) {
-     const [elapsed, setElapsed] = useState(0);
+    const [elapsed, setElapsed] = useState(0);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
 

@@ -73,8 +73,10 @@ export default function WorkoutPage() {
 
         try {
             const workoutDate = new Date().toISOString().split('T')[0];
-            const workout = await saveWorkout(user.id, workoutName, workoutDate);
+            const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
+            const workout = await saveWorkout(user.id, workoutName, workoutDate, durationSeconds);
             await saveWorkoutExercises(workout.id, exercises);
+            
 
             resetWorkout();
             router.push('/');

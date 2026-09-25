@@ -4,6 +4,7 @@ export type Workout = {
     name: string;
     date: string;
     created_at: string;
+    duration_seconds: number | null;
 }
 export type WorkoutExercise = {
     id: string;
