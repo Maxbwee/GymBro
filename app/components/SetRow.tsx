@@ -18,12 +18,13 @@ export default function SetRow({ setNumber, weight, reps, onChange, onRemove }: 
     const [repsInput, setRepsInput] = useState(reps === 0 ? '' : reps.toString());
 
 
-    function handleWeightChange(value: string) {
-        if (value !== '' && !/^\d*\.?\d{0,2}$/.test(value)) return;
-        setWeightInput(value);
-        const numericValue = value === '' || value === '.' ? 0 : Number(value);
-        onChange(numericValue, reps);
-    }
+function handleWeightChange(value: string) {
+    const normalizedValue = value.replace(',', '.');
+    if (normalizedValue !== '' && !/^\d*\.?\d{0,2}$/.test(normalizedValue)) return;
+    setWeightInput(normalizedValue);
+    const numericValue = normalizedValue === '' || normalizedValue === '.' ? 0 : Number(normalizedValue);
+    onChange(numericValue, reps);
+}
 
     function handleRepsChange(value: string) {
         if (value !== '' && !/^\d+$/.test(value)) return;
